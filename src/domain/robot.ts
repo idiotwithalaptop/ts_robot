@@ -65,13 +65,18 @@ export default class Robot {
     }
 
     move() : Robot {
+        if(!this.isPlaced()) {
+            // Not placed, ignore.
+            return this;
+        }
+
         const movement = MOVEMENT_MAP[this._direction];
         const newX = this._x + movement.xDelta;
         const newY = this._y + movement.yDelta;
-        if(this.isPlaced() && this.isValid(newX, newY, this._direction)) {
-            this.copy(this._x + movement.xDelta, this._y + movement.yDelta, this._direction);
+        if(this.isValid(newX, newY, this._direction)) {
+            return this.copy(newX, newY, this._direction);
         }
-        // Not placed or invalid placement, ignore.
+        // Invalid placement, ignore.
         return this;
     }
 
