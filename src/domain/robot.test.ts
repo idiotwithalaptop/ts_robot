@@ -15,11 +15,14 @@ describe("Robot domain object", () => {
         test("right() has no effect", () => {
             expect(testRobot.left()).toBe(testRobot);
         })
+        test("move() has no effect", () => {
+            expect(testRobot.move()).toBe(testRobot);
+        })
     })
 
     describe("is placed", () => {
         beforeEach(() =>{
-            testRobot = testRobot.place(0, 0, RobotDirection.NORTH);
+            testRobot = testRobot.place(1, 1, RobotDirection.NORTH);
         })
 
         describe("and is immutable", () => {
@@ -83,6 +86,88 @@ describe("Robot domain object", () => {
 
             test("West returns North", () => {
                 testRight(RobotDirection.WEST, RobotDirection.NORTH);
+            })
+        })
+
+        describe("move()", () => {
+            describe("Facing east", () => {
+                let newRobot;
+                beforeEach(() => {
+                    testRobot = testRobot.place(1,1,RobotDirection.EAST)
+                    newRobot = testRobot.move()
+                })
+
+                test("Moves x + 1", () => {
+                    expect(newRobot.x).toBe(testRobot.x + 1);
+                })
+
+                test("Y unaffected", () => {
+                    expect(newRobot.y).toBe(testRobot.y);
+                })
+
+                test("direction unaffected", () => {
+                    expect(newRobot.direction).toBe(testRobot.direction);
+                })
+            })
+
+            describe("Facing south", () => {
+                let newRobot;
+                beforeEach(() => {
+                    testRobot = testRobot.place(1,1,RobotDirection.SOUTH)
+                    newRobot = testRobot.move()
+                })
+
+                test("Moves y - 1", () => {
+                    expect(newRobot.y).toBe(testRobot.y - 1);
+                })
+
+                test("X unaffected", () => {
+                    expect(newRobot.x).toBe(testRobot.x);
+                })
+
+                test("direction unaffected", () => {
+                    expect(newRobot.direction).toBe(testRobot.direction);
+                })
+            })
+
+            describe("Facing west", () => {
+                let newRobot;
+                beforeEach(() => {
+                    testRobot = testRobot.place(1,1,RobotDirection.WEST)
+                    newRobot = testRobot.move()
+                })
+
+                test("Moves x - 1", () => {
+                    expect(newRobot.x).toBe(testRobot.x - 1);
+                })
+
+                test("Y unaffected", () => {
+                    expect(newRobot.y).toBe(testRobot.y);
+                })
+
+                test("direction unaffected", () => {
+                    expect(newRobot.direction).toBe(testRobot.direction);
+                })
+            })
+
+            describe("Facing North", () => {
+                let newRobot;
+                beforeEach(() => {
+                    testRobot = testRobot.place(1,1,RobotDirection.NORTH)
+                    newRobot = testRobot.move()
+                })
+
+                test("Moves y + 1", () => {
+                    expect(newRobot.y).toBe(testRobot.y + 1);
+                })
+
+                test("X unaffected", () => {
+                    expect(newRobot.x).toBe(testRobot.x);
+                })
+
+                test("direction unaffected", () => {
+                    expect(newRobot.direction).toBe(testRobot.direction);
+                })
             })
         })
     })

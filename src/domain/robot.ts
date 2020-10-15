@@ -1,5 +1,21 @@
 import { left as directionLeft, right as directionRight, RobotDirection } from "./direction"
 
+type Movement = {
+    xDelta: number;
+    yDelta: number;
+}
+
+type MovementMap = {
+    [key in RobotDirection]: Movement;
+};
+
+const MOVEMENT_MAP : MovementMap = {
+    [RobotDirection.EAST]: {xDelta: 1, yDelta: 0},
+    [RobotDirection.SOUTH]: {xDelta: 0, yDelta: -1},
+    [RobotDirection.WEST]: {xDelta: -1, yDelta: 0},
+    [RobotDirection.NORTH]: {xDelta: 0, yDelta: 1}
+}
+
 export default class Robot {
     readonly maxX: number;
     readonly maxY: number;
@@ -48,8 +64,17 @@ export default class Robot {
         return this;
     }
 
+    move() : Robot {
+        if(this.isPlaced()) {
+            const movement = MOVEMENT_MAP[this._direction];
+            return this.copy(this._x + movement.xDelta, this._y + movement.yDelta, this._direction);
+        }
+        // Not placed, ignore.
+        return this;
+    }
+
     private isPlaced() : boolean {
-        return this._x !== undefined && this._y !== undefined && this.direction !== undefined;
+        return this._x !== undefined && this._y !== undefined && this._direction !== undefined;
     }
 
     private isValid(x : number, y : number, direction : RobotDirection) {
