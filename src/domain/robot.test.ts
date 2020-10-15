@@ -169,6 +169,28 @@ describe("Robot domain object", () => {
                     expect(newRobot.direction).toBe(testRobot.direction);
                 })
             })
+
+            describe("Boundary Tests", () => {
+                test("On top boundary facing north, has no effect", () => {
+                    testRobot = testRobot.place(3,4,RobotDirection.NORTH);
+                    expect(testRobot.move()).toBe(testRobot)
+                })
+
+                test("On left boundary facing west, has no effect", () => {
+                    testRobot = testRobot.place(0,3,RobotDirection.WEST);
+                    expect(testRobot.move()).toBe(testRobot)
+                })
+
+                test("On right boundary facing east, has no effect", () => {
+                    testRobot = testRobot.place(4,3,RobotDirection.EAST);
+                    expect(testRobot.move()).toBe(testRobot)
+                })
+
+                test("On bottom boundary facing south, has no effect", () => {
+                    testRobot = testRobot.place(3,0,RobotDirection.SOUTH);
+                    expect(testRobot.move()).toBe(testRobot)
+                })
+            })
         })
     })
 
