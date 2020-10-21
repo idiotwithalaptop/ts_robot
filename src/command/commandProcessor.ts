@@ -1,5 +1,5 @@
 import Context from "../domain/context";
-import {Command, LeftCommand, MoveCommand, PlaceCommand, RightCommand} from "./command";
+import {Command, LeftCommand, MoveCommand, PlaceCommand, ReportCommand, RightCommand} from "./command";
 
 type CommandMap = {
     [key in string]: Command;
@@ -9,7 +9,8 @@ const COMMAND_LOOKUP : CommandMap = {
     "LEFT": LeftCommand,
     "RIGHT": RightCommand,
     "MOVE": MoveCommand,
-    "PLACE": PlaceCommand
+    "PLACE": PlaceCommand,
+    "REPORT": ReportCommand
 }
 
 const COMMAND_REGEX = new RegExp(/^\s*(\S+)(.*)/);

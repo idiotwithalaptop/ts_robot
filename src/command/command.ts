@@ -65,3 +65,15 @@ export const PlaceCommand : Command = {
         }
     }
 }
+
+export const ReportCommand : Command = {
+    isValid(args: string): boolean {
+        return args === null || args === undefined || args.trim().length === 0;
+    },
+
+    run(args: string, context: Context) {
+        if(context) {
+            context.robot.report()
+        }
+    }
+}

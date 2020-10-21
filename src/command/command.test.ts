@@ -1,4 +1,4 @@
-import {Command, LeftCommand, MoveCommand, PlaceCommand, RightCommand} from "./command";
+import {Command, LeftCommand, MoveCommand, PlaceCommand, ReportCommand, RightCommand} from "./command";
 import {mocked} from "ts-jest/utils";
 import Robot from "../domain/robot";
 import Context from "../domain/context";
@@ -84,6 +84,26 @@ describe("CommandTests", () => {
                 testCommand.run("", testContext);
 
                 expect(mockRobot.move).toHaveBeenCalledTimes(1);
+            });
+        })
+    });
+
+    describe("ReportCommand", () => {
+        beforeEach(() => {
+            testCommand = ReportCommand;
+        });
+
+        describe("isValid", describeZeroArgsValidityTests);
+
+        describe("run()", () => {
+            test("calls report on robot", () => {
+                const testContext = new Context(4,4);
+                const mockRobot = mocked(new Robot(4,4), true);
+                jest.spyOn(testContext, "robot", "get").mockReturnValue(mockRobot);
+
+                testCommand.run("", testContext);
+
+                expect(mockRobot.report).toHaveBeenCalledTimes(1);
             });
         })
     });

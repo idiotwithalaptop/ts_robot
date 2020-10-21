@@ -18,6 +18,7 @@ const MOVEMENT_MAP : MovementMap = {
 }
 
 export const ROBOT_CHANGED_EVENT  = "robot.changed";
+export const ROBOT_REPORTED_EVENT  = "robot.reported";
 
 export default class Robot extends events.EventEmitter {
     readonly maxX: number;
@@ -89,6 +90,13 @@ export default class Robot extends events.EventEmitter {
             return newRobot;
         }
         // Invalid placement, ignore.
+        return this;
+    }
+
+    report() : Robot {
+        if(this.isPlaced()) {
+            this.emit(ROBOT_REPORTED_EVENT, `${this._x},${this._y},${RobotDirection[this._direction]}`)
+        }
         return this;
     }
 

@@ -1,4 +1,4 @@
-import Robot, {ROBOT_CHANGED_EVENT} from "./robot"
+import Robot, {ROBOT_CHANGED_EVENT, ROBOT_REPORTED_EVENT} from "./robot"
 import {RobotDirection} from "./direction";
 
 describe("Robot domain object", () => {
@@ -39,11 +39,22 @@ describe("Robot domain object", () => {
                 expect(callback).toHaveBeenCalledWith(result);
             })
         })
+
+        test("report() does not report position and direction when not placed", () => {
+            const callback = jest.fn();
+            testRobot.addListener(ROBOT_REPORTED_EVENT, callback);
+
+            const result = testRobot.report();
+
+            expect(result).toBeDefined();
+            expect(result).toBe(testRobot);
+            expect(callback).toHaveBeenCalledTimes(0);
+        })
     })
 
     describe("is placed", () => {
         beforeEach(() => {
-            testRobot = testRobot.place(1, 1, RobotDirection.NORTH);
+            testRobot = testRobot.place(3, 4, RobotDirection.EAST);
         })
 
         describe("and is immutable", () => {
@@ -270,6 +281,20 @@ describe("Robot domain object", () => {
                     const result = testRobot.place(4, 5, RobotDirection.NORTH);
                     expect(result).toBe(testRobot);
                 })
+            })
+        })
+
+        describe("report()", () => {
+            test("correctly reports position and direction when placed", () => {
+                const callback = jest.fn();
+                testRobot.addListener(ROBOT_REPORTED_EVENT, callback);
+
+                const result = testRobot.report();
+
+                expect(result).toBeDefined();
+                expect(result).toBe(testRobot);
+                expect(callback).toHaveBeenCalledTimes(1);
+                expect(callback).toHaveBeenCalledWith("3,4,EAST");
             })
         })
     })

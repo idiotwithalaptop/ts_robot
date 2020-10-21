@@ -1,6 +1,6 @@
 import {processCommand} from "./commandProcessor";
 import Context from "../domain/context";
-import {LeftCommand, MoveCommand, PlaceCommand, RightCommand} from "./command";
+import {LeftCommand, MoveCommand, PlaceCommand, ReportCommand, RightCommand} from "./command";
 import {mocked} from "ts-jest/utils";
 jest.mock("./command")
 
@@ -10,6 +10,7 @@ describe("CommandProcessorTests", () => {
     const moveCommandMock = mocked(MoveCommand, true);
     const leftCommandMock = mocked(LeftCommand, true);
     const rightCommandMock = mocked(RightCommand, true);
+    const reportCommandMock = mocked(ReportCommand, true);
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -24,6 +25,7 @@ describe("CommandProcessorTests", () => {
             expect(moveCommandMock.run).toHaveBeenCalledTimes(0);
             expect(leftCommandMock.run).toHaveBeenCalledTimes(0);
             expect(rightCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(0);
             expect(placeCommandMock.run).toHaveBeenCalledTimes(1);
             expect(placeCommandMock.run).toHaveBeenCalledWith("4,3,WEST", testContext);
         });
@@ -35,6 +37,7 @@ describe("CommandProcessorTests", () => {
             expect(moveCommandMock.run).toHaveBeenCalledTimes(0);
             expect(leftCommandMock.run).toHaveBeenCalledTimes(0);
             expect(rightCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(0);
             expect(placeCommandMock.run).toHaveBeenCalledTimes(1);
             expect(placeCommandMock.run).toHaveBeenCalledWith("4,3,WEST", testContext);
         });
@@ -47,6 +50,7 @@ describe("CommandProcessorTests", () => {
             expect(placeCommandMock.run).toHaveBeenCalledTimes(0);
             expect(leftCommandMock.run).toHaveBeenCalledTimes(0);
             expect(rightCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(0);
             expect(moveCommandMock.run).toHaveBeenCalledTimes(1);
             expect(moveCommandMock.run).toHaveBeenCalledWith("", testContext);
         });
@@ -59,6 +63,7 @@ describe("CommandProcessorTests", () => {
             expect(placeCommandMock.run).toHaveBeenCalledTimes(0);
             expect(leftCommandMock.run).toHaveBeenCalledTimes(0);
             expect(rightCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(0);
             expect(moveCommandMock.run).toHaveBeenCalledTimes(1);
             expect(moveCommandMock.run).toHaveBeenCalledWith("", testContext);
         });
@@ -71,6 +76,7 @@ describe("CommandProcessorTests", () => {
             expect(moveCommandMock.run).toHaveBeenCalledTimes(0);
             expect(placeCommandMock.run).toHaveBeenCalledTimes(0);
             expect(rightCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(0);
             expect(leftCommandMock.run).toHaveBeenCalledTimes(1);
             expect(leftCommandMock.run).toHaveBeenCalledWith("", testContext);
         });
@@ -83,6 +89,7 @@ describe("CommandProcessorTests", () => {
             expect(moveCommandMock.run).toHaveBeenCalledTimes(0);
             expect(placeCommandMock.run).toHaveBeenCalledTimes(0);
             expect(rightCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(0);
             expect(leftCommandMock.run).toHaveBeenCalledTimes(1);
             expect(leftCommandMock.run).toHaveBeenCalledWith("", testContext);
         });
@@ -95,6 +102,7 @@ describe("CommandProcessorTests", () => {
             expect(moveCommandMock.run).toHaveBeenCalledTimes(0);
             expect(placeCommandMock.run).toHaveBeenCalledTimes(0);
             expect(leftCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(0);
             expect(rightCommandMock.run).toHaveBeenCalledTimes(1);
             expect(rightCommandMock.run).toHaveBeenCalledWith("", testContext);
         });
@@ -107,8 +115,35 @@ describe("CommandProcessorTests", () => {
             expect(moveCommandMock.run).toHaveBeenCalledTimes(0);
             expect(placeCommandMock.run).toHaveBeenCalledTimes(0);
             expect(leftCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(0);
             expect(rightCommandMock.run).toHaveBeenCalledTimes(1);
             expect(rightCommandMock.run).toHaveBeenCalledWith("", testContext);
+        });
+
+        test("Valid REPORT command correctly parsed", () => {
+            reportCommandMock.isValid.mockReturnValue(true);
+
+            processCommand("REPORT", testContext);
+
+            expect(moveCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(placeCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(rightCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(leftCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(1);
+            expect(reportCommandMock.run).toHaveBeenCalledWith("", testContext);
+        });
+
+        test("Valid REPORT command with extra whitespaces correctly parsed", () => {
+            reportCommandMock.isValid.mockReturnValue(true);
+
+            processCommand("        \tREPORT        ", testContext);
+
+            expect(moveCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(placeCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(rightCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(leftCommandMock.run).toHaveBeenCalledTimes(0);
+            expect(reportCommandMock.run).toHaveBeenCalledTimes(1);
+            expect(reportCommandMock.run).toHaveBeenCalledWith("", testContext);
         });
     })
 });
