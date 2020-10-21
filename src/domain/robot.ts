@@ -1,4 +1,5 @@
 import { left as directionLeft, right as directionRight, RobotDirection } from "./direction"
+import * as events from "events";
 
 type Movement = {
     xDelta: number;
@@ -16,7 +17,9 @@ const MOVEMENT_MAP : MovementMap = {
     [RobotDirection.NORTH]: {xDelta: 0, yDelta: 1}
 }
 
-export default class Robot {
+export const ROBOT_CHANGED_EVENT  = "robot.changed";
+
+export default class Robot extends events.EventEmitter {
     readonly maxX: number;
     readonly maxY: number;
     private _x?: number;
@@ -24,6 +27,7 @@ export default class Robot {
     private _direction?: RobotDirection;
 
     public constructor(maxX : number, maxY : number) {
+        super();
         this.maxX = maxX;
         this.maxY = maxY;
     }
@@ -42,7 +46,9 @@ export default class Robot {
 
     place(x : number, y : number, direction : RobotDirection) : Robot {
         if(this.isValid(x, y ,direction)) {
-            return this.copy(x, y, direction)
+            const newRobot = this.copy(x, y, direction);
+            this.emit(ROBOT_CHANGED_EVENT, newRobot);
+            return newRobot;
         }
         // Invalid, ignore
         return this;
@@ -50,7 +56,9 @@ export default class Robot {
 
     left() : Robot {
         if(this.isPlaced()) {
-            return this.copy(this._x, this._y, directionLeft(this._direction));
+            const newRobot = this.copy(this._x, this._y, directionLeft(this._direction));
+            this.emit(ROBOT_CHANGED_EVENT, newRobot);
+            return newRobot;
         }
         // Not placed, ignore.
         return this;
@@ -58,7 +66,9 @@ export default class Robot {
 
     right() : Robot {
         if(this.isPlaced()) {
-            return this.copy(this._x, this._y, directionRight(this._direction));
+            const newRobot = this.copy(this._x, this._y, directionRight(this._direction));
+            this.emit(ROBOT_CHANGED_EVENT, newRobot);
+            return newRobot;
         }
         // Not placed, ignore.
         return this;
@@ -74,7 +84,9 @@ export default class Robot {
         const newX = this._x + movement.xDelta;
         const newY = this._y + movement.yDelta;
         if(this.isValid(newX, newY, this._direction)) {
-            return this.copy(newX, newY, this._direction);
+            const newRobot = this.copy(newX, newY, this._direction);
+            this.emit(ROBOT_CHANGED_EVENT, newRobot);
+            return newRobot;
         }
         // Invalid placement, ignore.
         return this;
