@@ -1,5 +1,6 @@
 import Robot, {ROBOT_CHANGED_EVENT, ROBOT_REPORTED_EVENT} from "./robot"
 import {RobotDirection} from "./direction";
+import {EventBus} from "../events/eventBus";
 
 describe("Robot domain object", () => {
     let testRobot: Robot;
@@ -31,7 +32,7 @@ describe("Robot domain object", () => {
 
             test("emits robot changed event", () => {
                 const callback = jest.fn();
-                testRobot.addListener(ROBOT_CHANGED_EVENT, callback);
+                EventBus.getInstance().register(ROBOT_CHANGED_EVENT, callback);
 
                 const result = testRobot.place(1, 2, RobotDirection.EAST);
 
@@ -42,7 +43,7 @@ describe("Robot domain object", () => {
 
         test("report() does not report position and direction when not placed", () => {
             const callback = jest.fn();
-            testRobot.addListener(ROBOT_REPORTED_EVENT, callback);
+            EventBus.getInstance().register(ROBOT_REPORTED_EVENT, callback);
 
             const result = testRobot.report();
 
@@ -81,7 +82,7 @@ describe("Robot domain object", () => {
 
             test("emits robot changed event", () => {
                 const callback = jest.fn();
-                testRobot.addListener(ROBOT_CHANGED_EVENT, callback);
+                EventBus.getInstance().register(ROBOT_CHANGED_EVENT, callback);
 
                 const result = testRobot.place(1, 2, RobotDirection.EAST);
 
@@ -116,7 +117,7 @@ describe("Robot domain object", () => {
 
             test("emits robot changed event", () => {
                 const callback = jest.fn();
-                testRobot.addListener(ROBOT_CHANGED_EVENT, callback);
+                EventBus.getInstance().register(ROBOT_CHANGED_EVENT, callback);
 
                 const result = testRobot.left();
 
@@ -151,7 +152,7 @@ describe("Robot domain object", () => {
 
             test("emits robot changed event", () => {
                 const callback = jest.fn();
-                testRobot.addListener(ROBOT_CHANGED_EVENT, callback);
+                EventBus.getInstance().register(ROBOT_CHANGED_EVENT, callback);
 
                 const result = testRobot.right();
 
@@ -163,7 +164,7 @@ describe("Robot domain object", () => {
         describe("move()", () => {
             test("emits robot changed event", () => {
                 const callback = jest.fn();
-                testRobot.addListener(ROBOT_CHANGED_EVENT, callback);
+                EventBus.getInstance().register(ROBOT_CHANGED_EVENT, callback);
 
                 const result = testRobot.move();
 
@@ -287,7 +288,7 @@ describe("Robot domain object", () => {
         describe("report()", () => {
             test("correctly reports position and direction when placed", () => {
                 const callback = jest.fn();
-                testRobot.addListener(ROBOT_REPORTED_EVENT, callback);
+                EventBus.getInstance().register(ROBOT_REPORTED_EVENT, callback);
 
                 const result = testRobot.report();
 

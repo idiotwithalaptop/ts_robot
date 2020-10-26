@@ -5,7 +5,8 @@
   "main": "src/main.ts",
   "scripts": {
     "app": "npx ts-node src/main.ts",
-    "test": "npx jest"
+    "test": "npx jest",
+    "lint": "npx eslint"
   },
   "author": "Ryan Brown",
   "license": "ISC",

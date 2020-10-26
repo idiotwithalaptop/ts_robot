@@ -49,6 +49,7 @@ const DIRECTION_LOOKUP : DirectionMap = {
     "WEST": RobotDirection.WEST,
     "SOUTH": RobotDirection.SOUTH
 }
+
 export const PlaceCommand : Command = {
     isValid(args: string): boolean {
         return ARG_REGEX.test(args);

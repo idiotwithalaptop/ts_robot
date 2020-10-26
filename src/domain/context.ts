@@ -1,5 +1,6 @@
 import Table from "./table";
 import Robot, {ROBOT_CHANGED_EVENT} from "./robot";
+import {EventBus} from "../events/eventBus";
 
 export default class Context {
     private _table : Table;
@@ -7,6 +8,9 @@ export default class Context {
 
     constructor(width : number, length : number) {
         this._table = new Table(width, length);
+        EventBus.getInstance().register(ROBOT_CHANGED_EVENT, (robot : Robot) => {
+            this._robot = robot;
+        })
     }
 
     get robot() : Robot {
@@ -15,9 +19,6 @@ export default class Context {
 
     addRobot() : Robot {
         this._robot = new Robot(this._table.width - 1, this._table.length - 1);
-        this._robot.addListener(ROBOT_CHANGED_EVENT, (robot : Robot ) => {
-            this._robot = robot;
-        })
         return this._robot;
     }
 }

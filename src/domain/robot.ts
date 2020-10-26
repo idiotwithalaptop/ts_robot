@@ -1,5 +1,6 @@
 import { left as directionLeft, right as directionRight, RobotDirection } from "./direction"
-import * as events from "events";
+import {EventBus} from "../events/eventBus";
+import {Event} from "../events/event";
 
 type Movement = {
     xDelta: number;
@@ -17,10 +18,15 @@ const MOVEMENT_MAP : MovementMap = {
     [RobotDirection.NORTH]: {xDelta: 0, yDelta: 1}
 }
 
-export const ROBOT_CHANGED_EVENT  = "robot.changed";
-export const ROBOT_REPORTED_EVENT  = "robot.reported";
+export const ROBOT_CHANGED_EVENT : Event<Robot>  = {
+    name: "robot.changed"
+};
 
-export default class Robot extends events.EventEmitter {
+export const ROBOT_REPORTED_EVENT : Event<string>  = {
+    name: "robot.reported"
+};
+
+export default class Robot {
     readonly maxX: number;
     readonly maxY: number;
     private _x?: number;
@@ -28,7 +34,6 @@ export default class Robot extends events.EventEmitter {
     private _direction?: RobotDirection;
 
     public constructor(maxX : number, maxY : number) {
-        super();
         this.maxX = maxX;
         this.maxY = maxY;
     }
@@ -48,7 +53,7 @@ export default class Robot extends events.EventEmitter {
     place(x : number, y : number, direction : RobotDirection) : Robot {
         if(this.isValid(x, y ,direction)) {
             const newRobot = this.copy(x, y, direction);
-            this.emit(ROBOT_CHANGED_EVENT, newRobot);
+            EventBus.getInstance().emit(ROBOT_CHANGED_EVENT, newRobot);
             return newRobot;
         }
         // Invalid, ignore
@@ -58,7 +63,7 @@ export default class Robot extends events.EventEmitter {
     left() : Robot {
         if(this.isPlaced()) {
             const newRobot = this.copy(this._x, this._y, directionLeft(this._direction));
-            this.emit(ROBOT_CHANGED_EVENT, newRobot);
+            EventBus.getInstance().emit(ROBOT_CHANGED_EVENT, newRobot);
             return newRobot;
         }
         // Not placed, ignore.
@@ -68,7 +73,7 @@ export default class Robot extends events.EventEmitter {
     right() : Robot {
         if(this.isPlaced()) {
             const newRobot = this.copy(this._x, this._y, directionRight(this._direction));
-            this.emit(ROBOT_CHANGED_EVENT, newRobot);
+            EventBus.getInstance().emit(ROBOT_CHANGED_EVENT, newRobot);
             return newRobot;
         }
         // Not placed, ignore.
@@ -86,7 +91,7 @@ export default class Robot extends events.EventEmitter {
         const newY = this._y + movement.yDelta;
         if(this.isValid(newX, newY, this._direction)) {
             const newRobot = this.copy(newX, newY, this._direction);
-            this.emit(ROBOT_CHANGED_EVENT, newRobot);
+            EventBus.getInstance().emit(ROBOT_CHANGED_EVENT, newRobot);
             return newRobot;
         }
         // Invalid placement, ignore.
@@ -95,7 +100,7 @@ export default class Robot extends events.EventEmitter {
 
     report() : Robot {
         if(this.isPlaced()) {
-            this.emit(ROBOT_REPORTED_EVENT, `${this._x},${this._y},${RobotDirection[this._direction]}`)
+            EventBus.getInstance().emit(ROBOT_REPORTED_EVENT, `${this._x},${this._y},${RobotDirection[this._direction]}`)
         }
         return this;
     }
