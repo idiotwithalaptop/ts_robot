@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "Typescript implementation of Toy Robot test",
   "main": "src/main.ts",
+  "engines": {
+    "node": ">=16.0.0 <17"
+  },
   "scripts": {
-    "app": "npx ts-node src/main.ts",
-    "test": "npx jest",
-    "lint": "npx eslint",
-    "web": "webpack serve --mode development --env development --open --hot --progress --config ./src/web/webpack.config.ts",
+    "app": "ts-node src/main.ts",
+    "test": "jest",
+    "lint": "eslint",
+    "web": "webpack serve --mode development --env development --open --hot --config ./src/web/webpack.config.ts",
     "web:build": "webpack --mode production --env production --progress"
   },
   "author": "Ryan Brown",
